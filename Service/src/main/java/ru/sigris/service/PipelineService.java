@@ -31,6 +31,7 @@ public class PipelineService implements PipelineServiceInterface {
     private final Validator validator;
 
     @Override
+    @Transactional
     public TraversalResponse createPipeline(PipelineRequest request) {
         if (pipelineRepository.existsByName(request.pipelineName())) {
             throw new PipelineExist();
