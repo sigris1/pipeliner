@@ -1,6 +1,7 @@
 package ru.sigris.core.validator;
 
 import ru.sigris.core.exception.Exceptions.CycleDetectedException;
+import ru.sigris.core.exception.Exceptions.SelfCyclingException;
 import ru.sigris.model.Edge;
 import ru.sigris.model.Node;
 
@@ -9,6 +10,11 @@ import java.util.*;
 public class Validator {
 
     public static void validateNoCycle(List<Node> nodes, List<Edge> edges, UUID newFromId, UUID newToId) {
+
+        if (newFromId != null && newFromId.equals(newToId)) {
+            throw new SelfCyclingException();
+        }
+
         Map<UUID, List<UUID>> adjList = buildAdjacencyList(nodes, edges, newFromId, newToId);
 
         Set<UUID> visited = new HashSet<>();

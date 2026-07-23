@@ -9,8 +9,9 @@ import java.util.UUID;
 
 @Repository
 public interface EdgeRepository extends JpaRepository<Edge, UUID> {
-
     List<Edge> findAllByPipelineId(UUID pipelineId);
 
     boolean existsByFromIdAndToId(UUID fromId, UUID toId);
+
+    List<Edge> findAllByPipelineName(String pipelineName);
 }

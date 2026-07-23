@@ -10,10 +10,13 @@ import java.util.UUID;
 
 @Repository
 public interface NodeRepository extends JpaRepository<Node, UUID> {
-
     List<Node> findAllByPipelineId(UUID pipelineId);
 
-    Optional<Node> findByPipelineIdAndName(UUID pipelineId, String name);
-
     boolean existsByPipelineIdAndName(UUID pipelineId, String name);
+
+    Optional<Node> findByPipelineNameAndName(String pipelineName, String nodeName);
+
+    boolean existsByPipelineNameAndName(String pipelineName, String nodeName);
+
+    List<Node> findAllByPipelineName(String pipelineName);
 }
