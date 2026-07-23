@@ -28,6 +28,7 @@ public class PipelineService implements PipelineServiceInterface {
     private final PipelineRepository pipelineRepository;
     private final NodeRepository nodeRepository;
     private final EdgeRepository edgeRepository;
+    private final Validator validator;
 
     @Override
     public TraversalResponse createPipeline(PipelineRequest request) {
@@ -58,7 +59,7 @@ public class PipelineService implements PipelineServiceInterface {
                 throw new NodeNotFoundException();
             }
 
-            Validator.validateNoCycle(allNodes, edges, from.getId(), to.getId());
+            validator.validateNoCycle(allNodes, edges, from.getId(), to.getId());
 
             Edge edge = edgeRepository.save(
                     Edge.builder().from(from).to(to).pipeline(pipeline).build()
@@ -66,7 +67,7 @@ public class PipelineService implements PipelineServiceInterface {
             edges.add(edge);
         }
 
-        return new TraversalResponse(Validator.getTopologicalOrder(allNodes, edges));
+        return new TraversalResponse(validator.getTopologicalOrder(allNodes, edges));
     }
 
     @Override
@@ -107,7 +108,7 @@ public class PipelineService implements PipelineServiceInterface {
         List<Node> allNodes = nodeRepository.findAllByPipelineName(pipelineName);
         List<Edge> allEdges = edgeRepository.findAllByPipelineName(pipelineName);
 
-        Validator.validateNoCycle(allNodes, allEdges, fromNode.getId(), toNode.getId());
+        validator.validateNoCycle(allNodes, allEdges, fromNode.getId(), toNode.getId());
 
         Edge edge = Edge.builder()
                 .from(fromNode)
@@ -143,7 +144,7 @@ public class PipelineService implements PipelineServiceInterface {
         List<Node> nodes = nodeRepository.findAllByPipelineName(pipelineName);
         List<Edge> edges = edgeRepository.findAllByPipelineName(pipelineName);
 
-        List<String> order = Validator.getTopologicalOrder(nodes, edges);
+        List<String> order = validator.getTopologicalOrder(nodes, edges);
         return new TraversalResponse(order);
     }
 

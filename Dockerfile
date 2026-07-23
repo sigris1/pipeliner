@@ -14,7 +14,7 @@ RUN mvn dependency:go-offline -B
 
 COPY . .
 
-RUN mvn clean install -DskipTests -B
+RUN mvn clean install -B
 
 FROM eclipse-temurin:21-jre-alpine
 

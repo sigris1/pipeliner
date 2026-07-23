@@ -12,7 +12,7 @@ import ru.sigris.service.dto.ErrorResponse;
 import ru.sigris.service.exception.Exceptions.*;
 
 @RestControllerAdvice
-public class PipelinerExceptionHandler {
+public class PipelineExceptionHandler {
 
     @ExceptionHandler(PipelineNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePipelineNotFound(

@@ -1,5 +1,6 @@
 package ru.sigris.core.validator;
 
+import org.springframework.stereotype.Component;
 import ru.sigris.core.exception.Exceptions.CycleDetectedException;
 import ru.sigris.core.exception.Exceptions.SelfCyclingException;
 import ru.sigris.model.Edge;
@@ -7,9 +8,10 @@ import ru.sigris.model.Node;
 
 import java.util.*;
 
+@Component
 public class Validator {
 
-    public static void validateNoCycle(List<Node> nodes, List<Edge> edges, UUID newFromId, UUID newToId) {
+    public void validateNoCycle(List<Node> nodes, List<Edge> edges, UUID newFromId, UUID newToId) {
 
         if (newFromId != null && newFromId.equals(newToId)) {
             throw new SelfCyclingException();
@@ -29,7 +31,7 @@ public class Validator {
         }
     }
 
-    private static boolean hasCycleDFS(UUID current, Map<UUID, List<UUID>> adjList,
+    private boolean hasCycleDFS(UUID current, Map<UUID, List<UUID>> adjList,
                                        Set<UUID> visited, Set<UUID> recursionStack) {
         visited.add(current);
         recursionStack.add(current);
@@ -48,7 +50,7 @@ public class Validator {
         return false;
     }
 
-    public static List<String> getTopologicalOrder(List<Node> nodes, List<Edge> edges) {
+    public List<String> getTopologicalOrder(List<Node> nodes, List<Edge> edges) {
         Map<UUID, String> nodeNameMap = new HashMap<>();
         Map<UUID, Integer> inDegree = new HashMap<>();
         Map<UUID, List<UUID>> adjList = new HashMap<>();
@@ -94,7 +96,7 @@ public class Validator {
         return result;
     }
 
-    private static Map<UUID, List<UUID>> buildAdjacencyList(List<Node> nodes, List<Edge> edges,
+    private Map<UUID, List<UUID>> buildAdjacencyList(List<Node> nodes, List<Edge> edges,
                                                             UUID newFromId, UUID newToId) {
         Map<UUID, List<UUID>> adjList = new HashMap<>();
 
